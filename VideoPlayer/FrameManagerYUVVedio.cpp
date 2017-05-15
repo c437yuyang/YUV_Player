@@ -102,7 +102,7 @@ bool yuv420_2_rgb24(byte* yuvBuf, int nWidth, int nHeight, byte* pRgbBuf, unsign
 	if (!uData || !vData)
 		return false;
 	int rgb[3];
-	int i, j, m, n, x, y, pu, pv, py, rdif, invgdif, bdif;
+	int i, j, m, n, x, y, py, rdif, invgdif, bdif;
 	m = -nWidth;
 	n = -nHfWidth;
 	bool addhalf = true;

@@ -53,16 +53,17 @@ END_MESSAGE_MAP()
 
 CVideoPlayerDlg::CVideoPlayerDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_VIDEOPLAYER_DIALOG, pParent)
+	, m_strShowFrm(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bIsPaused = false;
 	m_bIsStarted = false;
-	m_nFrameIndex = 0;
 }
 
 void CVideoPlayerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_LB_FRM, m_strShowFrm);
 }
 
 BEGIN_MESSAGE_MAP(CVideoPlayerDlg, CDialogEx)
@@ -240,7 +241,8 @@ DWORD WINAPI PlayVideo(LPVOID lpParam)
 			_endthreadex(0);
 
 		pThis->OnDisplay(pThis->m_frmCtl.GetNextFrame());
-
+		pThis->m_strShowFrm.Format(_T("%d/%d"), pThis->m_frmCtl.GetFrameIdx()+1, pThis->m_frmCtl.GetFrameCount());
+		pThis->UpdateData(false);
 		Sleep(200);
 
 	}

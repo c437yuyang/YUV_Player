@@ -5,7 +5,7 @@
 #pragma once
 #include "FrameManager.h"
 #include "FrameManagerYUVVedio.h"
-#include "FrameIndexControl.h"
+
 #define PLAY_YUV
 // CVideoPlayerDlg ¶Ô»°¿ò
 class CVideoPlayerDlg : public CDialogEx
@@ -40,22 +40,18 @@ public:
 	CEvent m_event;
 	vector<string> m_vecFiles;
 	void OnDisplay(cv::Mat & curFrame);
-	void ShowToPicCtl(IplImage *imgSrc, UINT ID);
 	CRect m_rectPic;
 	bool m_bIsStarted;
 	bool m_bIsPaused;
-	int m_nFrameIndex;
-	CFrameIndexControl m_frmIdxCtl;
-#ifdef PALY_SEQ
+#ifdef PLAY_SEQ
 	CFrameManager m_frmCtl;
 #endif
 
 #ifdef PLAY_YUV
 	CFrameManagerYUVVedio m_frmCtl;
 #endif
-	
-	
 	afx_msg void OnBnClickedBtnSuspend();
 	afx_msg void OnBnClickedBtnStop();
 	afx_msg void OnBnClickedBtnExit();
+	CString m_strShowFrm;
 };

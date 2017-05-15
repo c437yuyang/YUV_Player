@@ -20,5 +20,7 @@ public:
 	cv::Mat GetNextFrame();
 	void InitParams(std::vector<std::string> files);
 	void QuitOps();
+	int GetFrameCount() { return m_frmIdXCtl.GetFrameCount(); }
+	int GetFrameIdx() { return m_frmIdXCtl.GetFrameIndex(); }
 };
 
