@@ -52,3 +52,15 @@
 #endif
 
 
+//公用头文件
+#include "Common.h"
+#include <opencv2/opencv.hpp>
+#include <iostream>
+#include <vector>
+#include <string>
+#include "CvvImage.h"
+using namespace std;
+using namespace cv;
+
+
+#define VERBOSE

@@ -34,11 +34,22 @@ CVideoPlayerApp::CVideoPlayerApp()
 
 CVideoPlayerApp theApp;
 
-
+#include <io.h>    
+#include <fcntl.h>  
+void InitConsoleWindow()
+{
+	FILE *stream;
+	if (!AllocConsole() || freopen_s(&stream, "CONOUT$", "w", stdout))
+		AfxMessageBox(_T("InitConsoleWindow Failed!")); //分配控制台在重定向输出流至控制台
+}
 // CVideoPlayerApp 初始化
 
 BOOL CVideoPlayerApp::InitInstance()
 {
+
+	//My Own
+	InitConsoleWindow();
+
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
 	//则需要 InitCommonControlsEx()。  否则，将无法创建窗口。
