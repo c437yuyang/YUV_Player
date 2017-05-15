@@ -215,7 +215,6 @@ void CVideoPlayerDlg::OnBnClickedBtnStart()
 	if (m_bIsStarted)
 		OnBnClickedBtnStop();
 
-
 	HANDLE hThreadSend;			//创建独立线程发送数据
 	DWORD ThreadSendID;
 
@@ -240,9 +239,11 @@ DWORD WINAPI PlayVideo(LPVOID lpParam)
 		if (pThis->m_bIsStarted == false) //点击结束后标志置位，停止播放
 			_endthreadex(0);
 
-		pThis->OnDisplay(pThis->m_frmCtl.GetNextFrame());
+		Mat frm = pThis->m_frmCtl.GetNextFrame();
+		pThis->OnDisplay(frm);
 		pThis->m_strShowFrm.Format(_T("%d/%d"), pThis->m_frmCtl.GetFrameIdx()+1, pThis->m_frmCtl.GetFrameCount());
 		pThis->UpdateData(false);
+		
 		Sleep(200);
 
 	}
@@ -311,6 +312,11 @@ void CVideoPlayerDlg::OnBnClickedBtnStop()
 	CRect lRect;
 	pStatic->GetClientRect(&lRect);
 	pStatic->GetDC()->FillSolidRect(lRect.left, lRect.top, lRect.Width(), lRect.Height(), RGB(160, 160, 160));
+#ifdef VERBOSE
+	cout << "点击了结束" << endl;
+#endif // VERBOSE
+
+	
 }
 
 

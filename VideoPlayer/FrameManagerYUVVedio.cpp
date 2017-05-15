@@ -15,9 +15,7 @@ CFrameManagerYUVVedio::~CFrameManagerYUVVedio()
 
 cv::Mat CFrameManagerYUVVedio::GetNextFrame()
 {
-
 	m_frmIdXCtl.NextFrame();
-	
 
 	int startPos = m_frmIdXCtl.GetFrameIndex() * m_nFrameSize;
 	byte *pYuv = new byte[m_nFrameSize];
