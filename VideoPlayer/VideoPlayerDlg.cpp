@@ -203,7 +203,11 @@ void CVideoPlayerDlg::OnBnClickedBtnStart()
 	//选择要打开的目录后，播放指定的序列
 	//1.先获取所有文件名
 	CCommon::GetFileName(strPath, m_vecFiles); //C++的静态成员是::的调用。。。。
-
+	if (m_vecFiles.size() < 1) 
+	{
+		MessageBox(_T("找不到序列图!")); 
+		return;
+	}
 	m_frmCtl.InitParams(m_vecFiles);
 #endif // PLAY_SEQ
 
@@ -213,7 +217,12 @@ void CVideoPlayerDlg::OnBnClickedBtnStart()
 	if (fDlg.DoModal() == IDCANCEL)
 		return;
 	CString YUVFileName = fDlg.GetPathName();
-
+	//printf("%ls", fDlg.GetFileExt());
+	if(fDlg.GetFileExt()!=_T("yuv") && fDlg.GetFileExt() != _T("YUV"))
+	{
+		MessageBox(_T("请打开yuv格式的文件!"));
+		return;
+	}
 	//弹出对话框选择帧大小
 	CDlgYUVParams dlg;
 	if (dlg.DoModal() == IDOK) 
