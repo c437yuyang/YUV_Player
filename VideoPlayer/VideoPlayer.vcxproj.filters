@@ -48,6 +48,9 @@
     <ClInclude Include="FrameManagerYUVVedio.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="DlgYUVParams.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="VideoPlayer.cpp">
@@ -72,6 +75,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="FrameManagerYUVVedio.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgYUVParams.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

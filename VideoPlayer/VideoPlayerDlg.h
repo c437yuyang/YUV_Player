@@ -5,7 +5,9 @@
 #pragma once
 #include "FrameManager.h"
 #include "FrameManagerYUVVedio.h"
+#include "DlgYUVParams.h"
 
+//#define PLAY_SEQ
 #define PLAY_YUV
 // CVideoPlayerDlg ¶Ô»°¿ò
 class CVideoPlayerDlg : public CDialogEx
@@ -35,7 +37,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedBtnStart();
-	
+
 public:
 	CEvent m_event;
 	vector<string> m_vecFiles;
@@ -49,9 +51,15 @@ public:
 
 #ifdef PLAY_YUV
 	CFrameManagerYUVVedio m_frmCtl;
+	int m_nFrmWidth;
+	int m_nFrmHeight;
 #endif
 	afx_msg void OnBnClickedBtnSuspend();
 	afx_msg void OnBnClickedBtnStop();
 	afx_msg void OnBnClickedBtnExit();
 	CString m_strShowFrm;
+	afx_msg void OnBnClickedBtnFrmPre();
+	afx_msg void OnBnClickedBtnFrmNext();
+	int m_nFrmDelay;
+	afx_msg void OnDeltaposSpinDelay(NMHDR *pNMHDR, LRESULT *pResult);
 };

@@ -18,6 +18,7 @@ private:
 	std::vector<std::string> m_vecFiles;
 public:
 	cv::Mat GetNextFrame();
+	cv::Mat GetPreFrame();
 	void InitParams(std::vector<std::string> files);
 	void QuitOps();
 	int GetFrameCount() { return m_frmIdXCtl.GetFrameCount(); }

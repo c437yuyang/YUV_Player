@@ -17,20 +17,7 @@ cv::Mat CFrameManagerYUVVedio::GetNextFrame()
 {
 	m_frmIdXCtl.NextFrame();
 
-	int startPos = m_frmIdXCtl.GetFrameIndex() * m_nFrameSize;
-	byte *pYuv = new byte[m_nFrameSize];
-	m_ifs.seekg(startPos);
-	m_ifs.read((char *)pYuv, m_nFrameSize);
-
-	Mat matRGB;
-	byte *pRgb = new byte[m_nFrameSize*2](); //yuv420格式是rgb的二分之一大小
-	unsigned long len;
-	yuv420_2_rgb24(pYuv, m_nFrameWidth, m_nFrameHeight, pRgb, &len);
-	rgb2Mat(pRgb, matRGB, m_nFrameWidth, m_nFrameHeight);
-	flip(matRGB, matRGB, 0);
-	delete[] pYuv;
-	delete[] pRgb;
-	return matRGB;
+	return GetFrameByPos();
 }
 
 //暂且只考虑yuv420格式的
@@ -61,7 +48,6 @@ void CFrameManagerYUVVedio::InitParams(CString YUVFile, int width, int height)
 	m_frmIdXCtl.SetFrameIndex(-1);
 	m_frmIdXCtl.SetReverse(false);
 
-
 #ifdef VERBOSE
 	cout << "文件大小:" << fileSize << endl;
 	cout << "每帧大小:" << m_nFrameSize << endl;
@@ -76,6 +62,33 @@ void CFrameManagerYUVVedio::QuitOps()
 {
 	m_ifs.close();
 }
+
+cv::Mat CFrameManagerYUVVedio::GetPreFrame()
+{
+	m_frmIdXCtl.PreFrame();
+
+	return GetFrameByPos();
+
+}
+
+cv::Mat CFrameManagerYUVVedio::GetFrameByPos()
+{
+	int startPos = m_frmIdXCtl.GetFrameIndex() * m_nFrameSize;
+	byte *pYuv = new byte[m_nFrameSize];
+	m_ifs.seekg(startPos);
+	m_ifs.read((char *)pYuv, m_nFrameSize);
+
+	Mat matRGB;
+	byte *pRgb = new byte[m_nFrameSize * 2](); //yuv420格式是rgb的二分之一大小
+	unsigned long len;
+	yuv420_2_rgb24(pYuv, m_nFrameWidth, m_nFrameHeight, pRgb, &len);
+	rgb2Mat(pRgb, matRGB, m_nFrameWidth, m_nFrameHeight);
+	flip(matRGB, matRGB, 0);
+	delete[] pYuv;
+	delete[] pRgb;
+	return matRGB;
+}
+
 
 bool yuv420_2_rgb24(byte* yuvBuf, int nWidth, int nHeight, byte* pRgbBuf, unsigned long *len)
 {

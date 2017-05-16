@@ -54,6 +54,7 @@ END_MESSAGE_MAP()
 CVideoPlayerDlg::CVideoPlayerDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(IDD_VIDEOPLAYER_DIALOG, pParent)
 	, m_strShowFrm(_T(""))
+	, m_nFrmDelay(50)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bIsPaused = false;
@@ -64,6 +65,7 @@ void CVideoPlayerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_LB_FRM, m_strShowFrm);
+	DDX_Text(pDX, IDC_EDIT_DELAY, m_nFrmDelay);
 }
 
 BEGIN_MESSAGE_MAP(CVideoPlayerDlg, CDialogEx)
@@ -74,6 +76,9 @@ BEGIN_MESSAGE_MAP(CVideoPlayerDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_SUSPEND, &CVideoPlayerDlg::OnBnClickedBtnSuspend)
 	ON_BN_CLICKED(IDC_BTN_STOP, &CVideoPlayerDlg::OnBnClickedBtnStop)
 	ON_BN_CLICKED(IDC_BTN_EXIT, &CVideoPlayerDlg::OnBnClickedBtnExit)
+	ON_BN_CLICKED(IDC_BTN_FRM_PRE, &CVideoPlayerDlg::OnBnClickedBtnFrmPre)
+	ON_BN_CLICKED(IDC_BTN_FRM_NEXT, &CVideoPlayerDlg::OnBnClickedBtnFrmNext)
+	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_DELAY, &CVideoPlayerDlg::OnDeltaposSpinDelay)
 END_MESSAGE_MAP()
 
 
@@ -203,12 +208,21 @@ void CVideoPlayerDlg::OnBnClickedBtnStart()
 #endif // PLAY_SEQ
 
 #ifdef PLAY_YUV
-	
+
 	CFileDialog fDlg(true); //没指定那么详细了
 	if (fDlg.DoModal() == IDCANCEL)
 		return;
 	CString YUVFileName = fDlg.GetPathName();
-	m_frmCtl.InitParams(YUVFileName, 176, 144);
+
+	//弹出对话框选择帧大小
+	CDlgYUVParams dlg;
+	if (dlg.DoModal() == IDOK) 
+	{
+		this->m_nFrmHeight = dlg.m_nFrmHeight;
+		this->m_nFrmWidth = dlg.m_nFrmWidth;
+	}
+
+	m_frmCtl.InitParams(YUVFileName, m_nFrmWidth, m_nFrmHeight);
 
 #endif // PLAY_YUV
 
@@ -241,10 +255,10 @@ DWORD WINAPI PlayVideo(LPVOID lpParam)
 
 		Mat frm = pThis->m_frmCtl.GetNextFrame();
 		pThis->OnDisplay(frm);
-		pThis->m_strShowFrm.Format(_T("%d/%d"), pThis->m_frmCtl.GetFrameIdx()+1, pThis->m_frmCtl.GetFrameCount());
+		pThis->m_strShowFrm.Format(_T("%d/%d"), pThis->m_frmCtl.GetFrameIdx() + 1, pThis->m_frmCtl.GetFrameCount());
 		pThis->UpdateData(false);
-		
-		Sleep(200);
+
+		Sleep(pThis->m_nFrmDelay);
 
 	}
 	return 0;
@@ -315,17 +329,64 @@ void CVideoPlayerDlg::OnBnClickedBtnStop()
 #ifdef VERBOSE
 	cout << "点击了结束" << endl;
 #endif // VERBOSE
-
-	
 }
 
 
 void CVideoPlayerDlg::OnBnClickedBtnExit()
 {
 	// TODO: 在此添加控件通知处理程序代码
-	if (m_bIsStarted) 
-	{
+	if (m_bIsStarted)
 		OnBnClickedBtnStop();
-	}
 	OnCancel();
+}
+
+
+void CVideoPlayerDlg::OnBnClickedBtnFrmPre()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+
+	if (m_bIsStarted && !m_bIsPaused)
+		OnBnClickedBtnSuspend();
+
+	Mat frm = m_frmCtl.GetPreFrame();
+	OnDisplay(frm);
+	m_strShowFrm.Format(_T("%d/%d"), m_frmCtl.GetFrameIdx() + 1, m_frmCtl.GetFrameCount());
+	UpdateData(false);
+
+}
+
+
+void CVideoPlayerDlg::OnBnClickedBtnFrmNext()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	if (m_bIsStarted && !m_bIsPaused)
+		OnBnClickedBtnSuspend();
+
+	Mat frm = m_frmCtl.GetNextFrame();
+	OnDisplay(frm);
+	m_strShowFrm.Format(_T("%d/%d"), m_frmCtl.GetFrameIdx() + 1, m_frmCtl.GetFrameCount());
+	UpdateData(false);
+}
+
+
+void CVideoPlayerDlg::OnDeltaposSpinDelay(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMUPDOWN pNMUpDown = reinterpret_cast<LPNMUPDOWN>(pNMHDR);
+	// TODO: 在此添加控件通知处理程序代码
+
+	UpdateData(1);
+	if (pNMUpDown->iDelta == -1) // 如果此值为-1 , 说明点击了Spin的往上的箭头
+	{
+		if (m_nFrmDelay < 1000)
+			m_nFrmDelay += 10;
+	}
+	else if (pNMUpDown->iDelta == 1) // 如果此值为1, 说明点击了Spin的往下的箭头
+	{
+		if (m_nFrmDelay > 20)
+			m_nFrmDelay -= 10;
+	}
+	UpdateData(false);
+	*pResult = 0;
 }

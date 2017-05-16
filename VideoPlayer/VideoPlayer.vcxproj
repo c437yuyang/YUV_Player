@@ -192,6 +192,7 @@
   <ItemGroup>
     <ClInclude Include="Common.h" />
     <ClInclude Include="CvvImage.h" />
+    <ClInclude Include="DlgYUVParams.h" />
     <ClInclude Include="FrameIndexControl.h" />
     <ClInclude Include="FrameManager.h" />
     <ClInclude Include="FrameManagerYUVVedio.h" />
@@ -204,6 +205,7 @@
   <ItemGroup>
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="CvvImage.cpp" />
+    <ClCompile Include="DlgYUVParams.cpp" />
     <ClCompile Include="FrameIndexControl.cpp" />
     <ClCompile Include="FrameManager.cpp" />
     <ClCompile Include="FrameManagerYUVVedio.cpp" />

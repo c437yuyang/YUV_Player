@@ -17,6 +17,14 @@ cv::Mat CFrameManager::GetNextFrame()
 	return imread(m_vecFiles[m_frmIdXCtl.GetFrameIndex()]);
 }
 
+
+cv::Mat CFrameManager::GetPreFrame()
+{
+	m_frmIdXCtl.PreFrame();
+	return imread(m_vecFiles[m_frmIdXCtl.GetFrameIndex()]);
+}
+
+
 void CFrameManager::InitParams(std::vector<std::string> files)
 {
 	m_vecFiles = files;

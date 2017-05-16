@@ -19,11 +19,16 @@ private:
 	int m_nFrameSize; //一帧图像的大小
 	int m_nFrameWidth;
 	int m_nFrameHeight;
+	cv::Mat CFrameManagerYUVVedio::GetFrameByPos();
 public:
 	cv::Mat GetNextFrame();
 	void InitParams(CString YUVFile, int width, int height); //后面考虑做成一个接口形式
 	void QuitOps();
 	int GetFrameCount() { return m_frmIdXCtl.GetFrameCount(); }
 	int GetFrameIdx() { return m_frmIdXCtl.GetFrameIndex(); }
+	cv::Mat GetPreFrame();
+
+	
+
 };
 
