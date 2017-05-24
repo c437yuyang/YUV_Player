@@ -37,16 +37,23 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedBtnStart();
-
+	afx_msg void OnBnClickedBtnSuspend();
+	afx_msg void OnBnClickedBtnStop();
+	afx_msg void OnBnClickedBtnExit();
+	afx_msg void OnBnClickedBtnFrmPre();
+	afx_msg void OnBnClickedBtnFrmNext();
+	afx_msg void OnDeltaposSpinDelay(NMHDR *pNMHDR, LRESULT *pResult);
 public:
-	CEvent m_event;
-	vector<string> m_vecFiles;
-	void OnDisplay(cv::Mat & curFrame);
-	CRect m_rectPic;
-	bool m_bIsStarted;
-	bool m_bIsPaused;
+	void OnDisplay(cv::Mat & curFrame); //用于显示当前帧到picture控件
+	CEvent m_event; //用于控制暂停的互斥变量
+	CRect m_rectPic; //picture控件位置变量
+	bool m_bIsStarted; //播放状态
+	bool m_bIsPaused; //播放状态
+	CString m_strShowFrm; //显示当前帧数的标签关联变量
+	int m_nFrmDelay; //控制帧间延时变量
 #ifdef PLAY_SEQ
 	CFrameManager m_frmCtl;
+	vector<string> m_vecFiles;
 #endif
 
 #ifdef PLAY_YUV
@@ -54,12 +61,5 @@ public:
 	int m_nFrmWidth;
 	int m_nFrmHeight;
 #endif
-	afx_msg void OnBnClickedBtnSuspend();
-	afx_msg void OnBnClickedBtnStop();
-	afx_msg void OnBnClickedBtnExit();
-	CString m_strShowFrm;
-	afx_msg void OnBnClickedBtnFrmPre();
-	afx_msg void OnBnClickedBtnFrmNext();
-	int m_nFrmDelay;
-	afx_msg void OnDeltaposSpinDelay(NMHDR *pNMHDR, LRESULT *pResult);
+
 };

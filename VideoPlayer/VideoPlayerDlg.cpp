@@ -116,6 +116,13 @@ BOOL CVideoPlayerDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	GetDlgItem(IDC_PIC)->GetClientRect(&m_rectPic);
 
+#ifdef PLAY_YUV
+	this->SetWindowTextW(_T("YUV播放器 By YXP"));
+#endif
+#ifdef PLAY_SEQ
+	this->SetWindowTextW(_T("序列图播放器 By YXP"));
+#endif
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
