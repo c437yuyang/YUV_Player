@@ -7,8 +7,8 @@
 #include "FrameManagerYUVVedio.h"
 #include "DlgYUVParams.h"
 
-#define PLAY_SEQ
-//#define PLAY_YUV
+//#define PLAY_SEQ
+#define PLAY_YUV
 // CVideoPlayerDlg ¶Ô»°¿ò
 class CVideoPlayerDlg : public CDialogEx
 {

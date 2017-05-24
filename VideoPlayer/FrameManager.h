@@ -10,9 +10,9 @@ public:
 	CFrameManager();
 	~CFrameManager();
 
-private:
+protected:
 	CFrameIndexControl m_frmIdXCtl;
-	
+
 public:
 	virtual cv::Mat GetNextFrame() = 0;
 	virtual cv::Mat GetPreFrame() = 0;

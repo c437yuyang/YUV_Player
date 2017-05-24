@@ -3,10 +3,9 @@
 #include "FrameManager.h"
 #include <vector>
 #include <string>
-#include <opencv2/opencv.hpp>
-#include "FrameIndexControl.h"
 
-class CFrameManagerSeq
+//CFrameManagerSeq类，播放序列图
+class CFrameManagerSeq:public CFrameManager
 {
 public:
 	CFrameManagerSeq();
@@ -14,15 +13,13 @@ public:
 	
 
 private:
-	CFrameIndexControl m_frmIdXCtl;
 	std::vector<std::string> m_vecFiles;
 public:
+#pragma region 接口里的方法
 	cv::Mat GetNextFrame();
 	cv::Mat GetPreFrame();
+	void QuitOps(); //若接口的方法没实现，则还是一个抽象类，不能实例化
+#pragma endregion
 	void InitParams(std::vector<std::string> files);
-	void QuitOps();
-	int GetFrameCount() { return m_frmIdXCtl.GetFrameCount(); }
-	int GetFrameIdx() { return m_frmIdXCtl.GetFrameIndex(); }
-
 };
 
