@@ -25,4 +25,5 @@ public:
 	int m_nFrmHeight;
 	afx_msg void OnBnClickedOk();
 	int m_nYUVType;
+	afx_msg void OnBnClickedCancel();
 };

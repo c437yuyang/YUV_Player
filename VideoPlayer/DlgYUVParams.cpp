@@ -35,6 +35,7 @@ void CDlgYUVParams::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CDlgYUVParams, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CDlgYUVParams::OnBnClickedOk)
+	ON_BN_CLICKED(IDCANCEL, &CDlgYUVParams::OnBnClickedCancel)
 END_MESSAGE_MAP()
 
 
@@ -52,4 +53,11 @@ void CDlgYUVParams::OnBnClickedOk()
 	}
 
 	CDialogEx::OnOK();
+}
+
+
+void CDlgYUVParams::OnBnClickedCancel()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	CDialogEx::OnCancel();
 }
