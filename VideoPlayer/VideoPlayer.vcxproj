@@ -195,6 +195,7 @@
     <ClInclude Include="DlgYUVParams.h" />
     <ClInclude Include="FrameIndexControl.h" />
     <ClInclude Include="FrameManager.h" />
+    <ClInclude Include="FrameManagerSeq.h" />
     <ClInclude Include="FrameManagerYUVVedio.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="DlgYUVParams.cpp" />
     <ClCompile Include="FrameIndexControl.cpp" />
     <ClCompile Include="FrameManager.cpp" />
+    <ClCompile Include="FrameManagerSeq.cpp" />
     <ClCompile Include="FrameManagerYUVVedio.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

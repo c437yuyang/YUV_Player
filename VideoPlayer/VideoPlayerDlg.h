@@ -3,12 +3,12 @@
 //
 
 #pragma once
-#include "FrameManager.h"
+#include "FrameManagerSeq.h"
 #include "FrameManagerYUVVedio.h"
 #include "DlgYUVParams.h"
 
-//#define PLAY_SEQ
-#define PLAY_YUV
+#define PLAY_SEQ
+//#define PLAY_YUV
 // CVideoPlayerDlg 对话框
 class CVideoPlayerDlg : public CDialogEx
 {
@@ -52,7 +52,7 @@ public:
 	CString m_strShowFrm; //显示当前帧数的标签关联变量
 	int m_nFrmDelay; //控制帧间延时变量
 #ifdef PLAY_SEQ
-	CFrameManager m_frmCtl;
+	CFrameManagerSeq m_frmCtl;
 	vector<string> m_vecFiles;
 #endif
 

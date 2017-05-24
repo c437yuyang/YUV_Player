@@ -22,12 +22,11 @@ private:
 	cv::Mat CFrameManagerYUVVedio::GetFrameByPos();
 public:
 	cv::Mat GetNextFrame();
+	cv::Mat GetPreFrame();
 	void InitParams(CString YUVFile, int width, int height); //后面考虑做成一个接口形式
 	void QuitOps();
 	int GetFrameCount() { return m_frmIdXCtl.GetFrameCount(); }
 	int GetFrameIdx() { return m_frmIdXCtl.GetFrameIndex(); }
-	cv::Mat GetPreFrame();
-
 	
 
 };

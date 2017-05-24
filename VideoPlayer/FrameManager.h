@@ -1,12 +1,9 @@
 #pragma once
 
 #include <opencv2/opencv.hpp>
-#include <string>
-#include <vector>
-
 #include "FrameIndexControl.h"
 
-//CFrameManager类，从指定序列图(vector<string> files) 返回帧
+//CFrameManager类,所有帧管理器的基类
 class CFrameManager
 {
 public:
@@ -15,12 +12,12 @@ public:
 
 private:
 	CFrameIndexControl m_frmIdXCtl;
-	std::vector<std::string> m_vecFiles;
+	
 public:
-	cv::Mat GetNextFrame();
-	cv::Mat GetPreFrame();
-	void InitParams(std::vector<std::string> files);
-	void QuitOps();
+	virtual cv::Mat GetNextFrame() = 0;
+	virtual cv::Mat GetPreFrame() = 0;
+	virtual	void QuitOps() = 0;
+
 	int GetFrameCount() { return m_frmIdXCtl.GetFrameCount(); }
 	int GetFrameIdx() { return m_frmIdXCtl.GetFrameIndex(); }
 };
