@@ -171,13 +171,15 @@ void CVideoPlayerDlg::OnSize(UINT nType, int cx, int cy)
 
 			//  把控件移动到新位置
 			pWndCtrl->MoveWindow(nLeft, nTop, nWidth, nHeight);
-			GetDlgItem(IDC_PIC)->GetClientRect(&m_rectPic);
 
 		}
 		
 	}
+	if (GetDlgItem(IDC_PIC) != NULL)
+		GetDlgItem(IDC_PIC)->GetClientRect(&m_rectPic);
 	Invalidate(TRUE);//强制刷新窗口，防止出现鬼影
 	UpdateWindow(); //updateWindow必须和invalidate配合使用才能有效果
+	OnDisplay(m_frmCtl.GetCurrentFrame()); //防止暂停后拖动窗口被背景色填充掉
 	CDialogEx::OnSize(nType, cx, cy);
 	
 	// TODO: 在此处添加消息处理程序代码

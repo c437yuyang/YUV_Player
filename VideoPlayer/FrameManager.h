@@ -17,6 +17,8 @@ public:
 #pragma region 子类需要实现的接口
 	virtual cv::Mat GetNextFrame() = 0;
 	virtual cv::Mat GetPreFrame() = 0;
+	virtual cv::Mat GetCurrentFrame() = 0;
+
 	virtual	void QuitOps() = 0;
 #pragma endregion
 

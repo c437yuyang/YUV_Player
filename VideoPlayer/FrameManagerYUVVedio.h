@@ -20,6 +20,7 @@ public:
 #pragma region 接口里的方法
 	cv::Mat GetNextFrame();
 	cv::Mat GetPreFrame();
+	cv::Mat GetCurrentFrame();
 	void QuitOps();
 #pragma endregion
 	void InitParams(CString YUVFile, int width, int height); //后面考虑做成一个接口形式

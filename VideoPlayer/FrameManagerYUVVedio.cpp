@@ -13,12 +13,7 @@ CFrameManagerYUVVedio::~CFrameManagerYUVVedio()
 {
 }
 
-cv::Mat CFrameManagerYUVVedio::GetNextFrame()
-{
-	m_frmIdXCtl.NextFrame();
 
-	return GetFrameByPos();
-}
 
 //暂且只考虑yuv420格式的
 void CFrameManagerYUVVedio::InitParams(CString YUVFile, int width, int height)
@@ -69,6 +64,18 @@ cv::Mat CFrameManagerYUVVedio::GetPreFrame()
 
 	return GetFrameByPos();
 
+}
+
+cv::Mat CFrameManagerYUVVedio::GetNextFrame()
+{
+	m_frmIdXCtl.NextFrame();
+
+	return GetFrameByPos();
+}
+
+cv::Mat CFrameManagerYUVVedio::GetCurrentFrame()
+{
+	return GetFrameByPos();
 }
 
 cv::Mat CFrameManagerYUVVedio::GetFrameByPos()
