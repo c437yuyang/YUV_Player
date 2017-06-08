@@ -139,7 +139,6 @@ void CVideoPlayerDlg::CancelCtrlFit(HWND hWnd)
 
 void CVideoPlayerDlg::OnSize(UINT nType, int cx, int cy)
 {
-
 	//计算窗口宽度和高度的改变量
 	int nIncrementX = cx - m_nWinWidth;
 	int nIncrementY = cy - m_nWinHeight;
@@ -277,16 +276,16 @@ BOOL CVideoPlayerDlg::OnInitDialog()
 	//适配控件
 	MakeCtrlFit(GetDlgItem(IDC_PIC), 0, 0, 100, 100);
 
-	MakeCtrlFit(GetDlgItem(IDC_BTN_START), 0, 100); //前两个参数用于控制位置的变动(不考虑缩放)
-	MakeCtrlFit(GetDlgItem(IDC_BTN_SUSPEND), 20, 100); //后两个参数用于控制缩放
-	MakeCtrlFit(GetDlgItem(IDC_BTN_STOP), 40, 100);
-	MakeCtrlFit(GetDlgItem(IDC_BTN_EXIT), 80, 100);
-	MakeCtrlFit(GetDlgItem(IDC_LB_FRM), 100, 100);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_START), 0, 100,20); //前两个参数用于控制位置的变动(不考虑缩放)(值代表其所在行或列的起始位置百分比)
+	MakeCtrlFit(GetDlgItem(IDC_BTN_SUSPEND), 20, 100,20); //后两个参数用于控制缩放(数值代表其所在行或列所占的比例)
+	MakeCtrlFit(GetDlgItem(IDC_BTN_STOP), 40, 100,20);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_EXIT), 80, 100, 20);
+	MakeCtrlFit(GetDlgItem(IDC_LB_FRM), 100, 100,20);
 
-	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_PRE), 0, 100);
-	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_NEXT), 20, 100);
-	MakeCtrlFit(GetDlgItem(IDC_STATIC_DELAY), 40, 100);
-	MakeCtrlFit(GetDlgItem(IDC_EDIT_DELAY), 80, 100);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_PRE), 0, 100,20);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_NEXT), 20, 100,20);
+	MakeCtrlFit(GetDlgItem(IDC_STATIC_DELAY), 80, 100,40);
+	MakeCtrlFit(GetDlgItem(IDC_EDIT_DELAY), 80, 100,20);
 	MakeCtrlFit(GetDlgItem(IDC_SPIN_DELAY), 100, 100);
 
 #pragma endregion
