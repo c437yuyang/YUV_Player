@@ -7,6 +7,24 @@
 #include "FrameManagerYUVVedio.h"
 #include "DlgYUVParams.h"
 
+
+#pragma region AutoFit
+/**
+*  控件随窗口变化的控制单元
+**/
+typedef struct tagCONTROL
+{
+	CWnd*	m_pWnd;				//指向控件的指针
+	CRect	m_rectWnd;			//控件所占区域
+	int		m_nMoveXPercent,	//控件沿x轴移动的百分比
+		m_nMoveYPercent,	//控件沿y轴移动的百分比
+		m_nZoomXPercent,	//控件沿x轴缩放的百分比
+		m_nZoomYPercent;	//控件沿y轴缩放的百分比
+}ControlInfo, *lpControlInfo;
+
+typedef		CArray<lpControlInfo>	CTRLLIST;	//控件的适配信息表
+#pragma endregion
+
 //#define PLAY_SEQ
 #define PLAY_YUV
 // CVideoPlayerDlg 对话框
@@ -61,5 +79,24 @@ public:
 	int m_nFrmWidth;
 	int m_nFrmHeight;
 #endif
+
+#pragma region AutoFit
+public:
+	~CVideoPlayerDlg();
+
+	void	SetMinSize(int nWidth, int nHeight);
+	void	FreeCtrlInfoList();
+	void	MakeCtrlFit(CWnd* pWnd, int nMoveXPercent = 0, int nMoveYPercent = 0, int nZoomXPercent = 0, int nZoomYPercent = 0);
+	void	CancelCtrlFit(HWND hWnd);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+
+	int			m_nWinWidth,		//窗口的宽度
+		m_nWinHeight;		//窗口的高度
+	POINT		m_ptMinTrackSize;	//窗口的最小大小
+	CTRLLIST	m_listCtrlInfo;		//控件适配信息的数组  
+#pragma endregion
+
+
 
 };

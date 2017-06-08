@@ -59,7 +59,143 @@ CVideoPlayerDlg::CVideoPlayerDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bIsPaused = false;
 	m_bIsStarted = false;
+#pragma region AutoFit
+	m_ptMinTrackSize.x = 0;
+	m_ptMinTrackSize.y = 0;
+#pragma endregion
 }
+
+#pragma region AutoFit
+CVideoPlayerDlg::~CVideoPlayerDlg()
+{
+	FreeCtrlInfoList();
+}
+
+void CVideoPlayerDlg::SetMinSize(int nWidth, int nHeight)
+{
+	ASSERT(nWidth > 0);
+	ASSERT(nHeight > 0);
+
+	//设置窗口最小值
+	m_ptMinTrackSize.x = nWidth;
+	m_ptMinTrackSize.y = nHeight;
+}
+
+void CVideoPlayerDlg::FreeCtrlInfoList()
+{
+	INT_PTR	nCount = m_listCtrlInfo.GetSize();
+
+	for (int i = 0; i < nCount; i++)
+	{
+		lpControlInfo pCtrlInfo = m_listCtrlInfo.ElementAt(i);
+		delete pCtrlInfo;
+	}
+
+	m_listCtrlInfo.RemoveAll();
+}
+
+void CVideoPlayerDlg::MakeCtrlFit(CWnd* pWnd, int nMoveXPercent, int nMoveYPercent, int nZoomXPercent, int nZoomYPercent)
+{
+	ASSERT(pWnd);									//指针是否为空
+	ASSERT(nMoveXPercent >= 0 && nMoveXPercent <= 100);	//nMoveXPercent值是否有效
+	ASSERT(nMoveYPercent >= 0 && nMoveYPercent <= 100);	//nMoveXPercent值是否有效
+	ASSERT(nZoomXPercent >= 0 && nZoomXPercent <= 100);	//nMoveXPercent值是否有效
+	ASSERT(nZoomYPercent >= 0 && nZoomYPercent <= 100);	//nMoveXPercent值是否有效
+
+	lpControlInfo	pCtrlInfo = new ControlInfo;	//创建结构指针
+
+													//填充变量
+	pCtrlInfo->m_pWnd = pWnd;
+	pCtrlInfo->m_nMoveXPercent = nMoveXPercent;
+	pCtrlInfo->m_nMoveYPercent = nMoveYPercent;
+	pCtrlInfo->m_nZoomXPercent = nZoomXPercent;
+	pCtrlInfo->m_nZoomYPercent = nZoomYPercent;
+
+	pWnd->GetWindowRect(pCtrlInfo->m_rectWnd);
+	ScreenToClient(&pCtrlInfo->m_rectWnd);
+
+	m_listCtrlInfo.Add(pCtrlInfo);	//加入维护列表
+}
+
+void CVideoPlayerDlg::CancelCtrlFit(HWND hWnd)
+{
+	INT_PTR	nCount = m_listCtrlInfo.GetSize();
+
+	for (int i = 0; i < nCount; i++)
+	{
+		lpControlInfo pCtrlInfo = m_listCtrlInfo.ElementAt(i);
+		if (pCtrlInfo->m_pWnd->GetSafeHwnd() == hWnd)
+		{
+			delete pCtrlInfo;
+			m_listCtrlInfo.RemoveAt(i);
+
+			break;
+		}
+	}
+
+
+
+}
+
+void CVideoPlayerDlg::OnSize(UINT nType, int cx, int cy)
+{
+
+	//计算窗口宽度和高度的改变量
+	int nIncrementX = cx - m_nWinWidth;
+	int nIncrementY = cy - m_nWinHeight;
+
+	INT_PTR	nCount = m_listCtrlInfo.GetSize();
+
+	UINT	uFlags = SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOCOPYBITS;
+	for (int i = 0; i < nCount; i++)
+	{
+		//获取变化控制系数
+		int	nMoveXPercent = m_listCtrlInfo[i]->m_nMoveXPercent;
+		int	nMoveYPercent = m_listCtrlInfo[i]->m_nMoveYPercent;
+		int	nZoomXPercent = m_listCtrlInfo[i]->m_nZoomXPercent;
+		int	nZoomYPercent = m_listCtrlInfo[i]->m_nZoomYPercent;
+
+		CWnd*	pWndCtrl = m_listCtrlInfo[i]->m_pWnd;
+		HWND	hWnd = pWndCtrl->GetSafeHwnd();
+		if ((NULL != pWndCtrl) && IsWindow(hWnd))
+		{
+			int nLeft = m_listCtrlInfo[i]->m_rectWnd.left;
+			int nTop = m_listCtrlInfo[i]->m_rectWnd.top;
+			int nWidth = m_listCtrlInfo[i]->m_rectWnd.Width();
+			int nHeight = m_listCtrlInfo[i]->m_rectWnd.Height();
+
+			//设置新的位置参数
+			nLeft += (nIncrementX*nMoveXPercent / 100);
+			nTop += (nIncrementY*nMoveYPercent / 100);
+			nWidth += (nIncrementX*nZoomXPercent / 100);
+			nHeight += (nIncrementY*nZoomYPercent / 100);
+
+			//  把控件移动到新位置
+			pWndCtrl->MoveWindow(nLeft, nTop, nWidth, nHeight);
+			GetDlgItem(IDC_PIC)->GetClientRect(&m_rectPic);
+
+		}
+		
+	}
+	Invalidate(TRUE);//强制刷新窗口，防止出现鬼影
+	UpdateWindow(); //updateWindow必须和invalidate配合使用才能有效果
+	CDialogEx::OnSize(nType, cx, cy);
+	
+	// TODO: 在此处添加消息处理程序代码
+}
+
+
+void CVideoPlayerDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	//设置窗口的最小大小
+	lpMMI->ptMinTrackSize = m_ptMinTrackSize;
+
+	CDialogEx::OnGetMinMaxInfo(lpMMI);
+}
+
+
+#pragma endregion
 
 void CVideoPlayerDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -79,6 +215,8 @@ BEGIN_MESSAGE_MAP(CVideoPlayerDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BTN_FRM_PRE, &CVideoPlayerDlg::OnBnClickedBtnFrmPre)
 	ON_BN_CLICKED(IDC_BTN_FRM_NEXT, &CVideoPlayerDlg::OnBnClickedBtnFrmNext)
 	ON_NOTIFY(UDN_DELTAPOS, IDC_SPIN_DELAY, &CVideoPlayerDlg::OnDeltaposSpinDelay)
+	ON_WM_SIZE()
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -122,6 +260,37 @@ BOOL CVideoPlayerDlg::OnInitDialog()
 #ifdef PLAY_SEQ
 	this->SetWindowTextW(_T("序列图播放器 By YXP"));
 #endif
+
+#pragma region AutoFit
+	CRect	rectTemp;
+
+	//获取客户区大小
+	GetClientRect(rectTemp);
+	//保存客户区信息
+	m_nWinWidth = rectTemp.Width();
+	m_nWinHeight = rectTemp.Height();
+	//获取窗口大小
+	GetWindowRect(rectTemp);
+	//设置窗口最小值
+	SetMinSize(rectTemp.Width(), rectTemp.Height());
+
+	//适配控件
+	MakeCtrlFit(GetDlgItem(IDC_PIC), 0, 0, 100, 100);
+
+	MakeCtrlFit(GetDlgItem(IDC_BTN_START), 0, 100); //前两个参数用于控制位置的变动(不考虑缩放)
+	MakeCtrlFit(GetDlgItem(IDC_BTN_SUSPEND), 20, 100); //后两个参数用于控制缩放
+	MakeCtrlFit(GetDlgItem(IDC_BTN_STOP), 40, 100);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_EXIT), 80, 100);
+	MakeCtrlFit(GetDlgItem(IDC_LB_FRM), 100, 100);
+
+	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_PRE), 0, 100);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_NEXT), 20, 100);
+	MakeCtrlFit(GetDlgItem(IDC_STATIC_DELAY), 40, 100);
+	MakeCtrlFit(GetDlgItem(IDC_EDIT_DELAY), 80, 100);
+	MakeCtrlFit(GetDlgItem(IDC_SPIN_DELAY), 100, 100);
+
+#pragma endregion
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -237,7 +406,7 @@ void CVideoPlayerDlg::OnBnClickedBtnStart()
 		this->m_nFrmHeight = dlg.m_nFrmHeight;
 		this->m_nFrmWidth = dlg.m_nFrmWidth;
 	}
-	else 
+	else
 		return;
 
 	m_frmCtl.InitParams(YUVFileName, m_nFrmWidth, m_nFrmHeight);
@@ -408,3 +577,5 @@ void CVideoPlayerDlg::OnDeltaposSpinDelay(NMHDR *pNMHDR, LRESULT *pResult)
 	UpdateData(false);
 	*pResult = 0;
 }
+
+

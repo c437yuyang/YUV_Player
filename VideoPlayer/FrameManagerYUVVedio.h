@@ -22,8 +22,6 @@ public:
 	cv::Mat GetPreFrame();
 	void QuitOps();
 #pragma endregion
-
-	
 	void InitParams(CString YUVFile, int width, int height); //后面考虑做成一个接口形式
 
 };
