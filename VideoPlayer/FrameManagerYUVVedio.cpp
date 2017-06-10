@@ -42,6 +42,7 @@ void CFrameManagerYUVVedio::InitParams(CString YUVFile, int width, int height)
 	m_frmIdXCtl.SetFrameCount(fileSize / m_nFrameSize);
 	m_frmIdXCtl.SetFrameIndex(-1);
 	m_frmIdXCtl.SetReverse(false);
+	m_bIsInitialized = true;
 
 #ifdef VERBOSE
 	cout << "文件大小:" << fileSize << endl;
@@ -56,6 +57,7 @@ void CFrameManagerYUVVedio::InitParams(CString YUVFile, int width, int height)
 void CFrameManagerYUVVedio::QuitOps()
 {
 	m_ifs.close();
+	m_bIsInitialized = false;
 }
 
 cv::Mat CFrameManagerYUVVedio::GetPreFrame()

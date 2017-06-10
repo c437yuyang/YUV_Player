@@ -37,9 +37,11 @@ void CFrameManagerSeq::InitParams(std::vector<std::string> files)
 	m_frmIdXCtl.SetFrameCount(m_vecFiles.size());
 	m_frmIdXCtl.SetFrameIndex(-1);
 	m_frmIdXCtl.SetReverse(false);
+	m_bIsInitialized = true;
 }
 
 void CFrameManagerSeq::QuitOps()
 {
+	m_bIsInitialized = false;
 
 }

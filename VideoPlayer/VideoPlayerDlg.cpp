@@ -173,15 +173,16 @@ void CVideoPlayerDlg::OnSize(UINT nType, int cx, int cy)
 			pWndCtrl->MoveWindow(nLeft, nTop, nWidth, nHeight);
 
 		}
-		
+
 	}
 	if (GetDlgItem(IDC_PIC) != NULL)
 		GetDlgItem(IDC_PIC)->GetClientRect(&m_rectPic);
 	Invalidate(TRUE);//强制刷新窗口，防止出现鬼影
 	UpdateWindow(); //updateWindow必须和invalidate配合使用才能有效果
-	OnDisplay(m_frmCtl.GetCurrentFrame()); //防止暂停后拖动窗口被背景色填充掉
+	if(m_frmCtl.m_bIsInitialized && m_frmCtl.GetFrameIdx() != -1) //防止未初始化的时候读取到错误帧
+		OnDisplay(m_frmCtl.GetCurrentFrame()); //防止暂停后拖动窗口被背景色填充掉
 	CDialogEx::OnSize(nType, cx, cy);
-	
+
 	// TODO: 在此处添加消息处理程序代码
 }
 
@@ -278,16 +279,16 @@ BOOL CVideoPlayerDlg::OnInitDialog()
 	//适配控件
 	MakeCtrlFit(GetDlgItem(IDC_PIC), 0, 0, 100, 100);
 
-	MakeCtrlFit(GetDlgItem(IDC_BTN_START), 0, 100,20); //前两个参数用于控制位置的变动(不考虑缩放)(值代表其所在行或列的起始位置百分比)
-	MakeCtrlFit(GetDlgItem(IDC_BTN_SUSPEND), 20, 100,20); //后两个参数用于控制缩放(数值代表其所在行或列所占的比例)
-	MakeCtrlFit(GetDlgItem(IDC_BTN_STOP), 40, 100,20);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_START), 0, 100, 20); //前两个参数用于控制位置的变动(不考虑缩放)(值代表其所在行或列的起始位置百分比)
+	MakeCtrlFit(GetDlgItem(IDC_BTN_SUSPEND), 20, 100, 20); //后两个参数用于控制缩放(数值代表其所在行或列所占的比例)
+	MakeCtrlFit(GetDlgItem(IDC_BTN_STOP), 40, 100, 20);
 	MakeCtrlFit(GetDlgItem(IDC_BTN_EXIT), 80, 100, 20);
-	MakeCtrlFit(GetDlgItem(IDC_LB_FRM), 100, 100,20);
+	MakeCtrlFit(GetDlgItem(IDC_LB_FRM), 100, 100, 20);
 
-	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_PRE), 0, 100,20);
-	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_NEXT), 20, 100,20);
-	MakeCtrlFit(GetDlgItem(IDC_STATIC_DELAY), 80, 100,40);
-	MakeCtrlFit(GetDlgItem(IDC_EDIT_DELAY), 80, 100,20);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_PRE), 0, 100, 20);
+	MakeCtrlFit(GetDlgItem(IDC_BTN_FRM_NEXT), 20, 100, 20);
+	MakeCtrlFit(GetDlgItem(IDC_STATIC_DELAY), 80, 100, 40);
+	MakeCtrlFit(GetDlgItem(IDC_EDIT_DELAY), 80, 100, 20);
 	MakeCtrlFit(GetDlgItem(IDC_SPIN_DELAY), 100, 100);
 
 #pragma endregion
